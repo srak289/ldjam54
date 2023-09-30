@@ -26,4 +26,10 @@ class EntityManager:
             # if the type matches the mask
             entity.dispatch(event)
 
+    def draw(self, canvas):
+        pass
+
+    def shutdown(self):
+        pass
+
 __all__ += ["EntityManager"]

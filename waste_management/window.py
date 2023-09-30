@@ -10,13 +10,9 @@ class WindowManager:
         self.display = pygame.display.set_mode((400, 600), pygame.RESIZABLE)
         self.clock = pygame.time.Clock()
 
-        # dispatch events to entities in our game so they can interact
-        # handle win  conditions and scoring
-        # handle graceful shutdown of the game (this means simply destroying everything)
-        # 
         self._menu = Menu()
         self._game = Game()
-        self._loading = Loading()
+        self._load = Load()
     
 
     @property
@@ -24,11 +20,11 @@ class WindowManager:
         if self._game.state == AppState.RUN:
             return self._game
         elif self._menu.state == AppState.RUN:
-            self._game.setup(menu=self._menu)
             return self._menu
         else:
-            self._menu.setup(game=self._game)
-            return self._loading
+            if not self._menu.state == AppState.SHUTDOWN:
+                self._menu.setup()
+            return self._load
 
     
     def run(self):
@@ -38,9 +34,11 @@ class WindowManager:
                     pygame.quit()
                     sys.exit()
                 print(f"Recieved event {event}")
-                self.running_app.dispatch(event)
+                self._game.call_dispatch(event)
+                self._menu.call_dispatch(event)
+                self._load.call_dispatch(event)
 
-            self.running_app.draw(self.display)
+            self.running_app.call_draw(self.display)
             self.running_app.run()
 
             pygame.display.update()
