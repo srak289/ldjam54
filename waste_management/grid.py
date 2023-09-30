@@ -1,4 +1,4 @@
-import pygame
+import enum
 
 from .entity import Entity
 
@@ -14,31 +14,21 @@ class TileCharacteristic(enum.Enum):
     NORMAL = 10
 
 
-class Tile(pygame.sprite.Sprite:
-    pass
+class Tile(Entity): pass
 
 
-class Grid:
-
-    def __init__(self):
+class Grid(Entity):
+    def new(self):
         self._tiles = []
-
-    def get_tile_at(self, x, y):
-        try:
-            return self._tiles[x][y]
-        except IndexArrayError:
-            raise
-
-    def blit(self, canvas):
-        for row in self._tiles:
-            for tile in row:
-                canvas.blit(tile.surface, tile.rect)
-            
-        
+        for x in range(self.x):
+            self._tiles.append([])
+            for y in range(self.y):
+                self._tiles[x].append(
+                    Tile(10, 10, self.scale)
+                )
 
 
-class Player:
-    pass
-
-class Enemy:
-    pass
+    def draw(self, canvas):
+        for x in self._tiles:
+            for y in x:
+                y.draw(canvas)

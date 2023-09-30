@@ -3,6 +3,7 @@ import pygame
 
 from .entity import *
 from .event import *
+from .grid import Grid
 
 
 class GameMode(enum.Enum):
@@ -66,11 +67,15 @@ class Application:
 
 class Game(Application):
     def setup(self):
+        self.grid = Grid(10, 10, 8)
+        self.grid.new()
         self._state = AppState.RUN
 
 
     def draw(self, canvas):
-        canvas.fill((127, 0, 127))
+        canvas.fill((0, 0, 0))
+        self.grid.draw(canvas)
+
 
     def dispatch(self, event):
         if event == GAME_RUN:
