@@ -1,3 +1,6 @@
+import pygame
+
+
 __all__ = []
 
 

@@ -28,7 +28,8 @@ class Application:
         return self._state
 
 
-    def main_loop(self):
+    def run(self):
+        """This is the main loop"""
         raise NotImplementedError
 
 
@@ -61,3 +62,6 @@ class Menu(Application):
 class Loading(Application):
     def draw(self, canvas):
         canvas.fill((127, 127, 127))
+
+    def run(self):
+        pass
