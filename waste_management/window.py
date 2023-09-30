@@ -37,6 +37,7 @@ class WindowManager:
                 self._game.call_dispatch(event)
                 self._menu.call_dispatch(event)
                 self._load.call_dispatch(event)
+                print(f"The running app is {self.running_app}")
 
             self.running_app.call_draw(self.display)
             self.running_app.run()

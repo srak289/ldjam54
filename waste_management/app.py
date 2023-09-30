@@ -74,12 +74,13 @@ class Game(Application):
         canvas.fill((127, 0, 127))
 
     def dispatch(self, event):
-        if event.type == GAME_RUN:
+        if event == GAME_RUN:
+            print("SETUP GAME")
             self.setup()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_k:
                 self.shutdown()
-            pygame.event.post(GAME_STOP)
+                pygame.event.post(GAME_STOP)
 
 
     def run(self):
@@ -96,12 +97,12 @@ class Menu(Application):
 
 
     def dispatch(self, event):
-        if event.type == GAME_STOP:
+        if event == GAME_STOP:
             self.setup()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_j:
                 self.shutdown()
-            pygame.event.post(GAME_RUN)
+                pygame.event.post(GAME_RUN)
 
     def run(self):
         pass
