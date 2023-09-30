@@ -67,7 +67,6 @@ class Application:
 class Game(Application):
     def setup(self):
         self._state = AppState.RUN
-        print("RUNNING GAME")
 
 
     def draw(self, canvas):
@@ -75,8 +74,8 @@ class Game(Application):
 
     def dispatch(self, event):
         if event == GAME_RUN:
-            print("SETUP GAME")
-            self.setup()
+            if not self.state == AppState.RUN:
+                self.setup()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_k:
                 self.shutdown()
@@ -98,7 +97,8 @@ class Menu(Application):
 
     def dispatch(self, event):
         if event == GAME_STOP:
-            self.setup()
+            if not self.state == AppState.RUN:
+                self.setup()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_j:
                 self.shutdown()
