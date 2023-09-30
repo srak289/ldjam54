@@ -24,8 +24,10 @@ class WindowManager:
         if self._game.state == AppState.RUN:
             return self._game
         elif self._menu.state == AppState.RUN:
+            self._game.setup(menu=self._menu)
             return self._menu
         else:
+            self._menu.setup(game=self._game)
             return self._loading
 
     

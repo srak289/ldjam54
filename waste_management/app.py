@@ -42,7 +42,6 @@ class Application:
 
 
     def dispatch(self, event):
-        # if it is not for us just dispatch it
         self.entity_manager.dispatch(event)
 
 
@@ -52,16 +51,61 @@ class Application:
 
 
 class Game(Application):
-    pass
+    def __init__(self):
+        self._menu = None
+
+
+    def setup(self, **kwargs):
+        if "menu" in kwargs:
+            self._menu = kwargs.pop("menu")
+
+
+    def draw(self, canvas):
+        canvas.fill((127, 0, 127))
+
+    def dispatch(self, event):
+        if event.type == :
+
+        if event.type == pygame.K_J:
+            self._state = AppState.STOP
+            pygame.event.push(pygame.event.Event("GameStop"))
+        super().dispatch(event)
+
+
+
+    def run(self):
+        pass
 
 
 class Menu(Application):
-    pass
+    def __init__(self):
+        self._game = None
+
+
+    def setup(self, **kwargs):
+        if "game" in kwargs:
+            self._game = kwargs.pop("game")
+        self._state = AppState.RUN
+
+
+    def draw(self, canvas):
+        canvas.fill((0, 127, 127))
+
+
+    def dispatch(self, event):
+        if event.type == pygame.K_J:
+            self._state = AppState.STOP
+            pygame.event.push(pygame.event.Event("GameRun"))
+        super().dispatch(event)
+
+    def run(self):
+        pass
 
 
 class Loading(Application):
     def draw(self, canvas):
         canvas.fill((127, 127, 127))
+
 
     def run(self):
         pass
