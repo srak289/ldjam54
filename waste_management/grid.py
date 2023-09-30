@@ -1,5 +1,6 @@
-from pygame import *
 import pygame
+
+from .entity import Entity
 
 
 class TileCharacteristic(enum.Enum):
