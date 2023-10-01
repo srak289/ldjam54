@@ -17,7 +17,7 @@ class Entity:
     color: tuple = None
 
     def __post_init__(self):
-        self.surface = pygame.Surface((w, h))
+        self.surface = pygame.Surface((self.w, self.h))
         self.rect = pygame.Rect(self.x, self.y, self.w, self.h)
         self.color = (
             random.randint(0, 255),
@@ -25,8 +25,8 @@ class Entity:
             random.randint(0, 255)
         )
         self.surface.fill(self.color)
-        self.rect = pygame.Rect(x, y, w, h)
-        print(f"Creating entity {self} at {x} {y} size {w} {h}")
+        self.rect = pygame.Rect(self.x, self.y, self.w, self.h)
+        print(f"Creating entity {self} at {self.x} {self.y} size {self.w} {self.h}")
 
 
     def set_position(self, x, y):
