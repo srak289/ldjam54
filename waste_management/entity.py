@@ -1,18 +1,25 @@
 import pygame
-
+import random
 
 __all__ = []
 
 
 class Entity:
-    def __init__(self, x, y, scale):
+    def __init__(self, x, y, w, h, scale):
         self._scale = scale
         self._x = x
         self._y = y
-        self.surface = pygame.Surface((x, y))
-        self._color = (0, 127, 0)
+        self._w = w
+        self._h = h
+        self.surface = pygame.Surface((w, h))
+        self._color = (
+            random.randint(0, 255),
+            random.randint(0, 255),
+            random.randint(0, 255)
+        )
         self.surface.fill(self.color)
-        self.rect = self.surface.get_rect()
+        self.rect = pygame.Rect(x, y, w, h)
+        print(f"Creating entity {self} at {x} {y} size {w} {h}")
 
 
     @property
@@ -26,8 +33,19 @@ class Entity:
 
 
     @property
+    def w(self):
+        return self._w
+
+
+    @property
+    def h(self):
+        return self._h
+
+
+    @property
     def scale(self):
         return self._scale
+
 
     @property
     def color(self):

@@ -7,7 +7,7 @@ from .app import *
 class WindowManager:
     def __init__(self):
         pygame.init()
-        self.display = pygame.display.set_mode((400, 600), pygame.RESIZABLE)
+        self.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
         self.clock = pygame.time.Clock()
 
         self._menu = Menu()
@@ -40,6 +40,8 @@ class WindowManager:
 
             self.running_app.call_draw(self.display)
             self.running_app.run()
+
+            pygame.event.pump()
 
             pygame.display.update()
             self.clock.tick(60)

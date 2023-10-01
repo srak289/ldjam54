@@ -29,15 +29,17 @@ class Application:
         return self._state
 
 
-    def run(self):
-        """This is the main loop"""
-        raise NotImplementedError
-
-
     def call_dispatch(self, event):
         self.dispatch(event)
         if self.state == AppState.RUN:
             self.entity_manager.dispatch(event)
+
+
+    def call_draw(self, canvas):
+        if self.state == AppState.RUN:
+            self.draw(canvas)
+            #self.entity_manager.draw(canvas)
+            # there should be an order to blit or we could draw over something else
 
 
     def setup(self):
@@ -45,10 +47,9 @@ class Application:
         raise NotImplementedError
 
 
-    def call_draw(self, canvas):
-        if self.state == AppState.RUN:
-            self.draw(canvas)
-            self.entity_manager.draw(canvas)
+    def run(self):
+        """This is the main loop"""
+        raise NotImplementedError
 
 
     def draw(self, canvas):
@@ -67,8 +68,8 @@ class Application:
 
 class Game(Application):
     def setup(self):
-        self.grid = Grid(10, 10, 8)
-        self.grid.new()
+        self.grid = Grid(0, 0, 120, 120, 1)
+        self.grid.setup(10, 10)
         self._state = AppState.RUN
 
 
