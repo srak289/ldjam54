@@ -21,15 +21,13 @@ class Grid(Entity):
     def setup(self, grid_width, grid_height):
         self._grid_width = grid_width
         self._grid_height = grid_height
-        self._border = 2
-        self._margin = 5
         self._tiles = []
 
         for x in range(0, self._grid_width):
             self._tiles.append([])
             for y in range(0, self._grid_height):
                 self._tiles[x].append(
-                    Tile(10+25*x, 10+25*y, 20, 20, self.scale)
+                    Tile(25*x, 25*y, 20, 20, self.scale)
                 )
 
 

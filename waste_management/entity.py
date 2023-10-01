@@ -12,20 +12,37 @@ class Entity:
     w: int
     h: int
     scale: int = 10
+    border: int = 5
+    margin: int = 10
     surface: pygame.Surface = None
     rect: pygame.Rect = None
     color: tuple = None
 
+
+    def _buffer(self, pos):
+        return self.margin + self.border + pos
+
+
+    def _stretch(self, dim):
+        return self.scale * dim
+
+
     def __post_init__(self):
         self.surface = pygame.Surface((self.w, self.h))
-        self.rect = pygame.Rect(self.x, self.y, self.w, self.h)
+        self.rect = pygame.Rect(
+            self._buffer(self.x),
+            self._buffer(self.y),
+            self.w,
+            self.h
+        )
+
         self.color = (
             random.randint(0, 255),
             random.randint(0, 255),
             random.randint(0, 255)
         )
         self.surface.fill(self.color)
-        self.rect = pygame.Rect(self.x, self.y, self.w, self.h)
+
         print(f"Creating entity {self} at {self.x} {self.y} size {self.w} {self.h}")
 
 
