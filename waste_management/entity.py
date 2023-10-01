@@ -1,18 +1,25 @@
+import dataclasses
 import pygame
 import random
 
 __all__ = []
 
 
+@dataclasses.dataclass
 class Entity:
-    def __init__(self, x, y, w, h, scale):
-        self._scale = scale
-        self._x = x
-        self._y = y
-        self._w = w
-        self._h = h
+    x: int
+    y: int
+    w: int
+    h: int
+    scale: int = 10
+    surface: pygame.Surface = None
+    rect: pygame.Rect = None
+    color: tuple = None
+
+    def __post_init__(self):
         self.surface = pygame.Surface((w, h))
-        self._color = (
+        self.rect = pygame.Rect(self.x, self.y, self.w, self.h)
+        self.color = (
             random.randint(0, 255),
             random.randint(0, 255),
             random.randint(0, 255)
@@ -22,39 +29,8 @@ class Entity:
         print(f"Creating entity {self} at {x} {y} size {w} {h}")
 
 
-    @property
-    def x(self):
-        return self._x
-
-
-    @property
-    def y(self):
-        return self._y
-
-
-    @property
-    def w(self):
-        return self._w
-
-
-    @property
-    def h(self):
-        return self._h
-
-
-    @property
-    def scale(self):
-        return self._scale
-
-
-    @property
-    def color(self):
-        return self._color
-
-
     def set_position(self, x, y):
-        self._x = x
-        self._y = y
+        self.rect.move(x, y)
 
 
     # blits could stack sprite effects
