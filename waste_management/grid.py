@@ -1,5 +1,5 @@
 import dataclasses
-import enum.Enum
+import enum
 import random
 
 from .entity import Entity
@@ -48,7 +48,8 @@ class Tile(Entity):
     def dispatch(self, event):
         if event == TILE_SHUF_ATTR:
             self._attr_shuffle()
-        elif event == pygame.
+        # elif event == pygame.MOUSEMOVE:
+        #     event.self._
 
 
 
