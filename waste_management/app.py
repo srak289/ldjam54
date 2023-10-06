@@ -68,8 +68,7 @@ class Application:
 
 class Game(Application):
     def setup(self):
-        self.grid = Grid(0, 0, 120, 120, 1)
-        self.grid.setup(10, 10)
+        self.grid = Grid(0, 0, 120, 120, 1, 10, 10)
         self._state = AppState.RUN
 
 

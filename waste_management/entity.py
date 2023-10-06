@@ -36,14 +36,16 @@ class Entity:
             self.h
         )
 
+        self.setup()
+
+
+    def setup(self):
         self.color = (
             random.randint(0, 255),
             random.randint(0, 255),
             random.randint(0, 255)
         )
         self.surface.fill(self.color)
-
-        print(f"Creating entity {self} at {self.x} {self.y} size {self.w} {self.h}")
 
 
     def set_position(self, x, y):

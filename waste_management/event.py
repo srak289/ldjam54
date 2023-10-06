@@ -1,23 +1,34 @@
 import pygame.event
 
-GAME_STOP = pygame.event.Event(
-    pygame.USEREVENT + 1,
-    message="GAME_STOP"
-)
+class GameEvent:
+    def __init__(self):
+        self.n = pygame.USEREVENT
 
-GAME_RUN = pygame.event.Event(
-    pygame.USEREVENT + 2,
-    message="GAME_RUN"
-)
+    def __iter__(self):
+        return self
 
-MENU_STOP = pygame.event.Event(
-    pygame.USEREVENT + 3,
-    message="MENU_STOP"
-)
+    def __next__(self):
+        cur, self.n = self.n, self.n + 1
+        return cur
 
-MENU_RUN = pygame.event.Event(
-    pygame.USEREVENT + 4,
-    message="MENU_RUN"
-)
+    def new(self, **kwargs):
+        return pygame.event.Event(
+            next(self),
+            **kwargs,
+        )
+
+ge = GameEvent()
+
+
+GAME_STOP = ge.new(message="GAME_STOP")
+
+GAME_RUN = ge.new(message="GAME_RUN")
+
+MENU_STOP = ge.new(message="MENU_STOP")
+
+MENU_RUN = ge.new(message="MENU_RUN")
+
+TILE_SHUF_ATTR = ge.new(message="TILE_SHUF_ATTR")
+
 
 __all__ = ["GAME_STOP", "GAME_RUN", "MENU_STOP", "MENU_RUN"]
