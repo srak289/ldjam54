@@ -88,9 +88,9 @@ class Entity(abc.ABC):
         pass
 
 
-    def draw(self, canvas):
+    def draw(self, display):
         self.surface.fill(self.color)
-        canvas.blit(self.surface, self.rect)
+        display.blit(self.surface, self.rect)
 
 __all__ += ["Entity"]
 
@@ -104,9 +104,9 @@ class EntityManager:
             # if the type matches the mask
             entity.dispatch(event)
 
-    def draw(self, canvas):
+    def draw(self, display):
         for e in self._entities.values():
-            e.draw(canvas)
+            e.draw(display)
 
     def shutdown(self):
         pass

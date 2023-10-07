@@ -1,5 +1,5 @@
-import copy
 import dataclasses
+import pygame
 import random
 
 from .entity import Entity
@@ -39,18 +39,36 @@ class Tile(Entity):
         # that we just had on the next clock cycle
         # cur = self.buf
         # self.buf = set()
-        pass
 
 
     @property
     def color(self):
         # TODO: compute color for multiple bufs
         if self.buf:
-            # FIXME
-            # nasty hack for now
-            return next(iter(self.buf)).rgb_color
+            if GlassTile in self.buf:
+                return GlassTile.rgb_color
+            else:
+                # FIXME
+                # nasty hack for now
+                return next(iter(self.buf)).rgb_color
         else:
             return NormalTile.rgb_color
+
+
+    def draw(self, display):
+        wid = self.w / len(self.buf)
+        breakpoint()
+        for b in self.buf:
+            t = pygame.Rect(
+                self.x,
+                self.y,
+                wid,
+                self._h,
+            )
+            self.surface.fill(
+                b.rgb_color,
+            )
+            display.blit(self.surface, self.rect)
 
 
     def setup(self):

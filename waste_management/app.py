@@ -35,10 +35,10 @@ class Application:
             self.entity_manager.dispatch(event)
 
 
-    def call_draw(self, canvas):
+    def call_draw(self, display):
         if self.state == AppState.RUN:
-            self.draw(canvas)
-            #self.entity_manager.draw(canvas)
+            self.draw(display)
+            #self.entity_manager.draw(display)
             # there should be an order to blit or we could draw over something else
 
 
@@ -52,7 +52,7 @@ class Application:
         raise NotImplementedError
 
 
-    def draw(self, canvas):
+    def draw(self, display):
         raise NotImplementedError
 
 
@@ -68,14 +68,14 @@ class Application:
 
 class Game(Application):
     def setup(self):
-        self.grid = Grid(0, 0, 120, 120, 1, 10, 10)
+        self.grid = Grid(0, 0, 120, 120, 1, 20, 10)
         self._state = AppState.RUN
         self.ticks = 0
 
 
-    def draw(self, canvas):
-        canvas.fill((0, 0, 0))
-        self.grid.draw(canvas)
+    def draw(self, display):
+        display.fill((0, 0, 0))
+        self.grid.draw(display)
 
 
     def dispatch(self, event):
@@ -105,8 +105,8 @@ class Menu(Application):
         self._state = AppState.RUN
 
 
-    def draw(self, canvas):
-        canvas.fill((0, 127, 127))
+    def draw(self, display):
+        display.fill((0, 127, 127))
 
 
     def dispatch(self, event):
@@ -129,8 +129,8 @@ class Load(Application):
         pygame.event.post(MENU_RUN)
 
 
-    def draw(self, canvas):
-        canvas.fill((127, 127, 127))
+    def draw(self, display):
+        display.fill((127, 127, 127))
 
 
     def dispatch(self, event):

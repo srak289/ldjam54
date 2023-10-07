@@ -9,7 +9,7 @@ from .tilemeta import *
 
 @dataclasses.dataclass
 class Grid(Entity):
-    grid_width: int = 10
+    grid_width: int = 20
     grid_height: int = 10
     tiles: list = dataclasses.field(default_factory=lambda: list())
     num_keys: int = 5
@@ -25,7 +25,7 @@ class Grid(Entity):
             self.tiles.append([])
             for x in range(0, self.grid_width):
                 self.tiles[y].append(
-                    Tile(25*x, 25*y, 20, 20, self.scale)
+                    Tile(35*x, 35*y, 30, 30, self.scale)
                 )
         self._select_exit()
         self._select_keys()
@@ -65,7 +65,7 @@ class Grid(Entity):
             for j, x in enumerate(y):
                 # TODO
                 # this should account for scale
-                x.set_position(25*j, 25*i)
+                x.set_position(35*j, 35*i)
 
     def dispatch(self, event):
         if event == GRID_COLLAPSE:
@@ -87,7 +87,7 @@ class Grid(Entity):
                 for x in y:
                     x.dispatch(event)
 
-    def draw(self, canvas):
+    def draw(self, display):
         for y in self.tiles:
             for x in y:
-                x.draw(canvas)
+                x.draw(display)
