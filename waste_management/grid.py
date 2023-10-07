@@ -60,19 +60,32 @@ class Grid(Entity):
             x = random.choice(range(0, self.grid_width))
             self.tiles[y][x].add_attr(GlassTile)
 
+    def _set_tile_position(self):
+        for i, y in enumerate(self.tiles):
+            for j, x in enumerate(y):
+                # TODO
+                # this should account for scale
+                x.set_position(25*j, 25*i)
 
     def dispatch(self, event):
         if event == GRID_COLLAPSE:
-            pass
-            # for y in 
-            #   for x in
-            #       self.tiles[y].remove(self.tiles[y][x]
-            # after current glass tiles collapse
-            # we select new ones with the same function
+            for y in self.tiles:
+                r = []
+                for x in y:
+                    if GlassTile in x.buf:
+                        r.append(x)
+                for z in r:
+                    y.remove(z)
+
+            self.grid_width -= 1
+            self._set_tile_position()
             self._select_glass()
-        for y in self.tiles:
-            for x in y:
-                x.dispatch(event)
+        else:
+            # TODO
+            # tiles should be part of entitymanager?
+            for y in self.tiles:
+                for x in y:
+                    x.dispatch(event)
 
     def draw(self, canvas):
         for y in self.tiles:

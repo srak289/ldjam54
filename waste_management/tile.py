@@ -45,8 +45,8 @@ class Tile(Entity):
     @property
     def color(self):
         # TODO: compute color for multiple bufs
-        print(f"buffs {self.buf}")
         if self.buf:
+            # FIXME
             # nasty hack for now
             return next(iter(self.buf)).rgb_color
         else:
@@ -65,7 +65,6 @@ class Tile(Entity):
             # do something special
             pass
         self.buf.add(attr)
-        self.surface.fill(self.color)
 
 
     def dispatch(self, event):

@@ -86,14 +86,18 @@ class Game(Application):
             if event.key == pygame.K_k:
                 self.shutdown()
                 pygame.event.post(GAME_STOP)
-        if event == TILE_SHUF_ATTR:
+        # we should really have the entity_manager dispatching to tiles
+        elif event in [TILE_SHUF_ATTR, GRID_COLLAPSE]:
             self.grid.dispatch(event)
 
 
     def run(self):
+        # main loop
         self.ticks += 1
         if self.ticks % (60 * 2) == 0:
             pygame.event.post(TILE_SHUF_ATTR)
+        if self.ticks % (60 * 5) == 0:
+            pygame.event.post(GRID_COLLAPSE)
 
 
 class Menu(Application):

@@ -43,7 +43,8 @@ class Entity(abc.ABC):
 
 
     def set_position(self, x, y):
-        self.rect.move(x, y)
+        self.rect.x = self._buffer(x)
+        self.rect.y = self._buffer(y)
 
 
     # blits could stack sprite effects
