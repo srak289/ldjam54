@@ -2,7 +2,7 @@ import dataclasses
 import random
 
 from .entity import Entity
-from .event import TILE_SHUF_ATTR
+from .event import *
 from .tile import Tile
 from .tilemeta import *
 
@@ -70,7 +70,9 @@ class Grid(Entity):
             # after current glass tiles collapse
             # we select new ones with the same function
             self._select_glass()
-
+        for y in self.tiles:
+            for x in y:
+                x.dispatch(event)
 
     def draw(self, canvas):
         for y in self.tiles:

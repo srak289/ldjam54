@@ -70,6 +70,7 @@ class Game(Application):
     def setup(self):
         self.grid = Grid(0, 0, 120, 120, 1, 10, 10)
         self._state = AppState.RUN
+        self.ticks = 0
 
 
     def draw(self, canvas):
@@ -85,10 +86,14 @@ class Game(Application):
             if event.key == pygame.K_k:
                 self.shutdown()
                 pygame.event.post(GAME_STOP)
+        if event == TILE_SHUF_ATTR:
+            self.grid.dispatch(event)
 
 
     def run(self):
-        pass
+        self.ticks += 1
+        if self.ticks % (60 * 2) == 0:
+            pygame.event.post(TILE_SHUF_ATTR)
 
 
 class Menu(Application):

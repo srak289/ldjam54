@@ -56,6 +56,7 @@ class Entity(abc.ABC):
 
 
     def draw(self, canvas):
+        self.surface.fill(self.color)
         canvas.blit(self.surface, self.rect)
 
 __all__ += ["Entity"]

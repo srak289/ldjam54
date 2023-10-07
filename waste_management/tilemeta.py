@@ -30,6 +30,8 @@ c.read_string(
 for s in c.sections():
     kwargs = {}
     for k, v in c.items(s):
+        if k == "frequency":
+            v = float(v)
         if k == "rgb_color":
             v = tuple(map(int, v.split(",")))
         kwargs[k] = v
