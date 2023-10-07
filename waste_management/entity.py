@@ -8,10 +8,10 @@ __all__ = []
 
 @dataclasses.dataclass
 class Entity(abc.ABC):
-    x: int
-    y: int
-    w: int
-    h: int
+    _x: int
+    _y: int
+    _w: int
+    _h: int
     scale: int = 10
     border: int = 5
     margin: int = 10
@@ -21,20 +21,52 @@ class Entity(abc.ABC):
         return self.margin + self.border + pos
 
 
-    def _stretch(self, dim):
+    def _fit(self, dim):
         return self.scale * dim
 
 
     def __post_init__(self):
         self.surface = pygame.Surface((self.w, self.h))
         self.rect = pygame.Rect(
-            self._buffer(self.x),
-            self._buffer(self.y),
+            self.x,
+            self.y,
             self.w,
             self.h
         )
 
         self.setup()
+
+
+    @property
+    def w(self):
+        return self._w
+
+
+    @property
+    def h(self):
+        return self._h
+
+
+    @property
+    def x(self):
+        return self._buffer(self._x)
+
+
+    @x.setter
+    def x(self, n):
+        self._x = n
+        self.rect.x = self.x
+
+
+    @property
+    def y(self):
+        return self._buffer(self._y)
+
+
+    @y.setter
+    def y(self, n):
+        self._y = n
+        self.rect.y = self.y
 
 
     @abc.abstractmethod
@@ -43,8 +75,8 @@ class Entity(abc.ABC):
 
 
     def set_position(self, x, y):
-        self.rect.x = self._buffer(x)
-        self.rect.y = self._buffer(y)
+        self.x = x
+        self.y = y
 
 
     # blits could stack sprite effects
