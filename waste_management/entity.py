@@ -1,3 +1,4 @@
+import abc
 import dataclasses
 import pygame
 import random
@@ -6,7 +7,7 @@ __all__ = []
 
 
 @dataclasses.dataclass
-class Entity:
+class Entity(abc.ABC):
     x: int
     y: int
     w: int
@@ -14,9 +15,6 @@ class Entity:
     scale: int = 10
     border: int = 5
     margin: int = 10
-    surface: pygame.Surface = None
-    rect: pygame.Rect = None
-    color: tuple = None
 
 
     def _buffer(self, pos):
@@ -39,13 +37,9 @@ class Entity:
         self.setup()
 
 
+    @abc.abstractmethod
     def setup(self):
-        self.color = (
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255)
-        )
-        self.surface.fill(self.color)
+        raise NotImplementedError
 
 
     def set_position(self, x, y):

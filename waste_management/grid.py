@@ -4,6 +4,7 @@ import random
 from .entity import Entity
 from .event import TILE_SHUF_ATTR
 from .tile import Tile
+from .tilemeta import *
 
 
 @dataclasses.dataclass
@@ -18,38 +19,60 @@ class Grid(Entity):
         self.grid_width = width
         self.grid_height = height
 
+
     def setup(self):
-        for x in range(0, self.grid_width):
+        for y in range(0, self.grid_height):
             self.tiles.append([])
-            for y in range(0, self.grid_height):
-                self.tiles[x].append(
+            for x in range(0, self.grid_width):
+                self.tiles[y].append(
                     Tile(25*x, 25*y, 20, 20, self.scale)
                 )
-        self._choose_key()
-        self._choose_glass()
-        self._choose_exit()
+        self._select_exit()
+        self._select_keys()
+        self._select_glass()
 
 
-    def _choose_key(self):
-        for _ in range(0, self.num_keys):
-            x = random.choice(range(0, self.grid_width))
-            y = random.choice(range(0, self.grid_height))
-            self.tiles[x][y].add_schar(TileCharacteristic.KEY)
-
-
-    def _choose_glass(self):
-        for y in range(0, self.grid_height):
-            x = random.choice(range(0, self.grid_width))
-            self.tiles[x][y].add_schar(TileCharacteristic.GLASS)
-
-
-    def _choose_exit(self):
-        x = random.choice(range(0, self.grid_width))
+    def _select_exit(self):
         y = random.choice(range(0, self.grid_height))
-        self.tiles[x][y].add_schar(TileCharacteristic.EXIT)
+        x = random.choice(range(0, self.grid_width))
+        self.tiles[y][x].add_attr(ExitTile)
+
+
+    def _select_keys(self):
+        for _ in range(0, self.num_keys):
+            # we should ensure that the key does not
+            # land on the exit
+            y = random.choice(range(0, self.grid_height))
+            x = random.choice(range(0, self.grid_width))
+            self.tiles[y][x].add_attr(KeyTile)
+
+
+    def _select_glass(self):
+        for y in range(0, self.grid_height):
+
+            # this could loop for "harder" levels
+            # where there could be more than one glass tile per row
+            # for _ in range(0, self.num_glass):
+            # we would need to ensure the tiles selected were not special
+            # x = random.choice(range(0, self.grid_width))
+            # if self.tiles[x][y].is_special: ...
+            
+            x = random.choice(range(0, self.grid_width))
+            self.tiles[y][x].add_attr(GlassTile)
+
+
+    def dispatch(self, event):
+        if event == GRID_COLLAPSE:
+            pass
+            # for y in 
+            #   for x in
+            #       self.tiles[y].remove(self.tiles[y][x]
+            # after current glass tiles collapse
+            # we select new ones with the same function
+            self._select_glass()
 
 
     def draw(self, canvas):
-        for x in self.tiles:
-            for y in x:
-                y.draw(canvas)
+        for y in self.tiles:
+            for x in y:
+                x.draw(canvas)

@@ -9,39 +9,41 @@ from .tilemeta import *
 @dataclasses.dataclass
 class Tile(Entity):
     special: bool = False
-    sbuf: set = dataclasses.field(default_factory=lambda: set())
     buf: set = dataclasses.field(default_factory=lambda: set())
 
 
     def _attr_shuffle(self):
-        cur = self.buf
-        self.buf = set()
+        # we can only shuffle unspecial attrs
+        # perhaps we should make sure we cannot regain attrs
+        # that we just had on the next clock cycle
+        # cur = self.buf
+        # self.buf = set()
+        pass
+
+
+    @property
+    def color(self):
+        # TODO: compute color for multiple bufs
+        if self.buf:
+            # nasty hack for now
+            return next(iter(self.buf)).rgb_color
+        else:
+            return NormalTile.rgb_color
 
 
     def setup(self):
         self._attr_shuffle()
-        self.color = TileAttributes.NormalTile.rgb_color
         self.surface.fill(self.color)
 
 
-    def _curcolor(self):
-        pass
-
-
-    def add_char(self, ch: TileCharacteristic):
-        """Append a normal characteristic
+    def add_attr(self, attr: TileAttribute):
+        """Append an attribute
         """
-        self.color = getattr(TileColor, ch.name)
+        if attr.special:
+            # do something special
+            pass
+        self.buf.add(attr)
         self.surface.fill(self.color)
-        self.buf.add(ch)
-
-
-    def add_schar(self, ch: TileCharacteristic):
-        """Append a special characteristic
-        """
-        self.color = getattr(TileColor, ch.name)
-        self.surface.fill(self.color)
-        self.sbuf.add(ch)
 
 
     def dispatch(self, event):

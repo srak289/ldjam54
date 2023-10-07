@@ -30,5 +30,7 @@ MENU_RUN = ge.new(message="MENU_RUN")
 
 TILE_SHUF_ATTR = ge.new(message="TILE_SHUF_ATTR")
 
+GRID_COLLAPSE = ge.new(message="GRID_COLLAPSE")
+
 
 __all__ = ["GAME_STOP", "GAME_RUN", "MENU_STOP", "MENU_RUN"]

@@ -19,6 +19,8 @@ class TileAttributeMeta(type):
 
 class TileAttribute(metaclass=TileAttributeMeta): pass
 
+__all__ += ["TileAttribute"]
+
 c = configparser.ConfigParser()
 
 c.read_string(
