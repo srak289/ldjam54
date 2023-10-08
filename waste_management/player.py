@@ -19,6 +19,7 @@ class Player(Entity):
 
     def draw(self, display):
         self.surface.fill(self._transparent)
+        # something about the border math is probably wrong
         pygame.draw.circle(
             self.surface,
             self.color,
@@ -31,9 +32,6 @@ class Player(Entity):
     def setup(self):
         self.margin = 10
         self.buffer = 5
-        self._transparent = (255, 0, 255)
-        # is the surface set for alpha
-        self.surface.set_colorkey(self._transparent)
         self.color = (10, 240, 205)
 
 

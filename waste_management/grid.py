@@ -116,21 +116,27 @@ class Grid(Entity):
         self.player.set_tile(dest)
 
 
+    def _collapse(self):
+        for y in self.tiles:
+            r = []
+            for x in y:
+                if GlassTile in x.buf:
+                    r.append(x)
+            for z in r:
+                if self.player.tile == z:
+                    pygame.event.post(PLAYER_CRUSHED)
+                y.remove(z)
+
+        self.grid_width -= 1
+        self._set_tile_position()
+        self._select_glass()
+
+
     def dispatch(self, event):
         if event.type == pygame.KEYDOWN:
             self.player.dispatch(event)
         elif event == GRID_COLLAPSE:
-            for y in self.tiles:
-                r = []
-                for x in y:
-                    if GlassTile in x.buf:
-                        r.append(x)
-                for z in r:
-                    y.remove(z)
-
-            self.grid_width -= 1
-            self._set_tile_position()
-            self._select_glass()
+            self._collapse()
         elif event in (PLAYER_UP, PLAYER_DOWN, PLAYER_LEFT, PLAYER_RIGHT):
             print("GRID MOVING PLAYER")
             self._move_player(event)

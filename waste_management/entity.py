@@ -25,6 +25,8 @@ class Entity(abc.ABC):
             self.w,
             self.h
         )
+        self._transparent = (255, 0, 255)
+        self.surface.set_colorkey(self._transparent)
         self.setup()
 
 
