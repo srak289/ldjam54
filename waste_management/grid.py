@@ -28,6 +28,9 @@ class Grid(Entity):
                 self.tiles[y].append(
                     Tile(35*x, 35*y, 30, 30, self.scale)
                 )
+
+        self._special_tiles = set([x for x in TileAttributes.tiles if x.special])
+
         self._select_exit()
         self._select_keys()
         self._select_glass()
@@ -58,8 +61,11 @@ class Grid(Entity):
             # x = random.choice(range(0, self.grid_width))
             # if self.tiles[x][y].is_special: ...
             
-            x = random.choice(range(0, self.grid_width))
-            self.tiles[y][x].add_attr(GlassTile)
+            x = random.choice(self.tiles[y])
+            while self._special_tiles & x.buf:
+                print(f"Recalculating glass tile because {x} is special!")
+                x = random.choice(self.tiles[y])
+            x.add_attr(GlassTile)
 
     def _set_tile_position(self):
         for i, y in enumerate(self.tiles):
