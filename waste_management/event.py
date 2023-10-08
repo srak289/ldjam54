@@ -33,4 +33,23 @@ TILE_SHUF_ATTR = ge.new(message="TILE_SHUF_ATTR")
 GRID_COLLAPSE = ge.new(message="GRID_COLLAPSE")
 
 
-__all__ = ["GAME_STOP", "GAME_RUN", "MENU_STOP", "MENU_RUN", "TILE_SHUF_ATTR", "GRID_COLLAPSE"]
+PLAYER_UP = ge.new(message="PLAYER_UP")
+PLAYER_DOWN = ge.new(message="PLAYER_DOWN")
+PLAYER_LEFT = ge.new(message="PLAYER_LEFT")
+PLAYER_RIGHT = ge.new(message="PLAYER_RIGHT")
+PLAYER_INVENTORY = ge.new(message="PLAYER_INVENTORY")
+
+
+__all__ = [
+    "GAME_STOP",
+    "GAME_RUN",
+    "MENU_STOP",
+    "MENU_RUN",
+    "TILE_SHUF_ATTR",
+    "GRID_COLLAPSE",
+    "PLAYER_UP",
+    "PLAYER_DOWN",
+    "PLAYER_LEFT",
+    "PLAYER_RIGHT",
+    "PLAYER_INVENTORY",
+]

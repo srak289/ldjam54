@@ -87,8 +87,12 @@ class Game(Application):
                 self.shutdown()
                 pygame.event.post(GAME_STOP)
         # we should really have the entity_manager dispatching to tiles
-        elif event in [TILE_SHUF_ATTR, GRID_COLLAPSE]:
-            self.grid.dispatch(event)
+        if (
+            event in [TILE_SHUF_ATTR, GRID_COLLAPSE, PLAYER_UP, PLAYER_DOWN, PLAYER_LEFT, PLAYER_RIGHT]
+            or event.type in [pygame.KEYDOWN]
+        ):
+            if hasattr(self, "grid"):
+                self.grid.dispatch(event)
 
 
     def run(self):

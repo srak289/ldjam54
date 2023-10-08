@@ -1,8 +1,10 @@
 import dataclasses
+import pygame
 import random
 
 from .entity import Entity
 from .event import *
+from .player import Player
 from .tile import Tile
 from .tilemeta import *
 
@@ -12,6 +14,7 @@ class Grid(Entity):
     grid_width: int = 20
     grid_height: int = 10
     tiles: list = dataclasses.field(default_factory=lambda: list())
+    player: Player = None
     num_keys: int = 5
 
 
@@ -34,6 +37,9 @@ class Grid(Entity):
         self._select_exit()
         self._select_keys()
         self._select_glass()
+
+        self.player = Player(0, 0, 30, 30, self.scale)
+        self.player.set_tile(self.tiles[0][0])
 
 
     def _select_exit(self):
@@ -67,6 +73,7 @@ class Grid(Entity):
                 x = random.choice(self.tiles[y])
             x.add_attr(GlassTile)
 
+
     def _set_tile_position(self):
         for i, y in enumerate(self.tiles):
             for j, x in enumerate(y):
@@ -74,8 +81,45 @@ class Grid(Entity):
                 # TODO `35` should not be static
                 x.set_position(35*j, 35*i)
 
+
+    def _move_player(self, event):
+        # perhaps the player's location is based on tile
+        # so the player should maintain a reference to the current tile
+        # this would also allow interaction with buffs
+        cur = self.player.tile
+
+        def find_player():
+            for i, y in enumerate(self.tiles):
+                for j, x in enumerate(y):
+                    if cur == x:
+                        return i, j
+
+        i, j = find_player()
+
+        if event == PLAYER_UP:
+            i -= 1
+        elif event == PLAYER_DOWN:
+            i += 1
+        elif event == PLAYER_LEFT:
+            j -= 1
+        elif event == PLAYER_RIGHT:
+            j += 1
+
+        if i < 0 or j < 0:
+            return
+
+        try:
+            dest = self.tiles[i][j]
+        except IndexError:
+            return
+
+        self.player.set_tile(dest)
+
+
     def dispatch(self, event):
-        if event == GRID_COLLAPSE:
+        if event.type == pygame.KEYDOWN:
+            self.player.dispatch(event)
+        elif event == GRID_COLLAPSE:
             for y in self.tiles:
                 r = []
                 for x in y:
@@ -87,6 +131,9 @@ class Grid(Entity):
             self.grid_width -= 1
             self._set_tile_position()
             self._select_glass()
+        elif event in (PLAYER_UP, PLAYER_DOWN, PLAYER_LEFT, PLAYER_RIGHT):
+            print("GRID MOVING PLAYER")
+            self._move_player(event)
         else:
             # TODO
             # tiles should be part of entitymanager?
@@ -94,7 +141,9 @@ class Grid(Entity):
                 for x in y:
                     x.dispatch(event)
 
+
     def draw(self, display):
         for y in self.tiles:
             for x in y:
                 x.draw(display)
+        self.player.draw(display)
