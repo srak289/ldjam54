@@ -24,6 +24,7 @@ class Grid(Entity):
         for y in range(0, self.grid_height):
             self.tiles.append([])
             for x in range(0, self.grid_width):
+                # TODO `35` should not be static
                 self.tiles[y].append(
                     Tile(35*x, 35*y, 30, 30, self.scale)
                 )
@@ -63,8 +64,8 @@ class Grid(Entity):
     def _set_tile_position(self):
         for i, y in enumerate(self.tiles):
             for j, x in enumerate(y):
-                # TODO
-                # this should account for scale
+                # TODO this should account for scale
+                # TODO `35` should not be static
                 x.set_position(35*j, 35*i)
 
     def dispatch(self, event):

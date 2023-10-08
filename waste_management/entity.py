@@ -13,16 +13,8 @@ class Entity(abc.ABC):
     _w: int
     _h: int
     scale: int = 10
-    border: int = 5
+    border: int = 6
     margin: int = 10
-
-
-    def _buffer(self, pos):
-        return self.margin + self.border + pos
-
-
-    def _fit(self, dim):
-        return self.scale * dim
 
 
     def __post_init__(self):
@@ -33,8 +25,15 @@ class Entity(abc.ABC):
             self.w,
             self.h
         )
-
         self.setup()
+
+
+    def _buffer(self, pos):
+        return self.margin + self.border + pos
+
+
+    def _fit(self, dim):
+        return self.scale * dim
 
 
     @property
@@ -42,9 +41,19 @@ class Entity(abc.ABC):
         return self._w
 
 
+    @w.setter
+    def w(self, n):
+        self._w = n
+
+
     @property
     def h(self):
         return self._h
+
+
+    @h.setter
+    def h(self, n):
+        self._h = h
 
 
     @property
@@ -69,28 +78,28 @@ class Entity(abc.ABC):
         self.rect.y = self.y
 
 
-    @abc.abstractmethod
-    def setup(self):
-        raise NotImplementedError
-
-
     def set_position(self, x, y):
         self.x = x
         self.y = y
 
 
-    # blits could stack sprite effects
+    @abc.abstractmethod
+    def setup(self):
+        """Specific initializations for a subclass of Entity
+        """
+        raise NotImplementedError
 
+
+    @abc.abstractmethod
     def dispatch(self, event):
-        if event.type == pygame.WINDOWRESIZE:
-            pass
-        # handle the event; if it is for us
-        pass
+        """Event handling
+        """
+        raise NotImplementedError
 
 
+    @abc.abstractmethod
     def draw(self, display):
-        self.surface.fill(self.color)
-        display.blit(self.surface, self.rect)
+        raise NotImplementedError
 
 __all__ += ["Entity"]
 
@@ -99,14 +108,17 @@ class EntityManager:
     def __init__(self):
         self._entities = {}
 
+
     def dispatch(self, event):
         for entity in self._entities:
             # if the type matches the mask
             entity.dispatch(event)
 
+
     def draw(self, display):
         for e in self._entities.values():
             e.draw(display)
+
 
     def shutdown(self):
         pass

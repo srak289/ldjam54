@@ -14,7 +14,7 @@ class Tile(Entity):
 
 
     def _attr_shuffle(self):
-        cur = set()
+        cur = set({NormalTile})
         for a in self.buf:
             if a.special:
                 cur.add(a)
@@ -32,13 +32,13 @@ class Tile(Entity):
                         best = x
             return best
 
-        self.buf.add(select())
-
         # we can only shuffle unspecial attrs
         # perhaps we should make sure we cannot regain attrs
         # that we just had on the next clock cycle
         # cur = self.buf
         # self.buf = set()
+
+        self.buf.add(select())
 
 
     @property
@@ -56,19 +56,12 @@ class Tile(Entity):
 
 
     def draw(self, display):
-        wid = self.w / len(self.buf)
-        breakpoint()
-        for b in self.buf:
-            t = pygame.Rect(
-                self.x,
-                self.y,
-                wid,
-                self._h,
-            )
-            self.surface.fill(
-                b.rgb_color,
-            )
-            display.blit(self.surface, self.rect)
+        wid = self.w // len(self.buf)
+        for i, b in enumerate(self.buf):
+            # drawing rect is rel to surface (0, 0)
+            t = pygame.Rect(i*wid, 0, wid, self._h)
+            self.surface.fill(b.rgb_color, rect=t)
+        display.blit(self.surface, self.rect)
 
 
     def setup(self):
@@ -90,3 +83,5 @@ class Tile(Entity):
             self._attr_shuffle()
         # elif event == pygame.MOUSEMOVE:
         #     event.self._
+
+__all__ = ["Tile"]
