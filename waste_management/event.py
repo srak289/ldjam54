@@ -1,5 +1,6 @@
 import pygame.event
 
+
 class GameEvent:
     def __init__(self):
         self.n = pygame.USEREVENT
@@ -46,18 +47,3 @@ PLAYER_INJURED = ge.new(message="PLAYER_INJURED")
 PLAYER_INFECTED = ge.new(message="PLAYER_INFECTED")
 PLAYER_SLIP = ge.new(message="PLAYER_SLIP")
 PLAYER_PICKUP = ge.new(message="PLAYER_PICKUP")
-
-
-__all__ = [
-    "GAME_STOP",
-    "GAME_RUN",
-    "MENU_STOP",
-    "MENU_RUN",
-    "TILE_SHUF_ATTR",
-    "GRID_COLLAPSE",
-    "PLAYER_UP",
-    "PLAYER_DOWN",
-    "PLAYER_LEFT",
-    "PLAYER_RIGHT",
-    "PLAYER_INVENTORY",
-]

@@ -71,6 +71,7 @@ class Game(Application):
         self.grid = Grid(0, 0, 120, 120, 1, 20, 10)
         self._state = AppState.RUN
         self.ticks = 0
+        self.actions = 0
 
 
     def draw(self, display):

@@ -69,7 +69,6 @@ class Grid(Entity):
             
             x = random.choice(self.tiles[y])
             while self._special_tiles & x.buf:
-                print(f"Recalculating glass tile because {x} is special!")
                 x = random.choice(self.tiles[y])
             x.add_attr(GlassTile)
 
@@ -137,9 +136,15 @@ class Grid(Entity):
             self.player.dispatch(event)
         elif event == GRID_COLLAPSE:
             self._collapse()
+        # FIXME these groupings of events should have a parent that implements
+        # __iter__
         elif event in (PLAYER_UP, PLAYER_DOWN, PLAYER_LEFT, PLAYER_RIGHT):
-            print("GRID MOVING PLAYER")
             self._move_player(event)
+        elif event in (
+            PLAYER_KILLED, PLAYER_CRUSHED, PLAYER_INFECTED, PLAYER_SLIP,
+            PLAYER_INJURED, PLAYER_PICKUP
+        ):
+            pass
         else:
             # TODO
             # tiles should be part of entitymanager?
