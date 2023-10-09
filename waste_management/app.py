@@ -83,17 +83,26 @@ class Game(Application):
         if event == GAME_RUN:
             if not self.state == AppState.RUN:
                 self.setup()
-        elif event.type == pygame.KEYDOWN:
+            return
+
+        if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_k:
                 self.shutdown()
                 pygame.event.post(GAME_STOP)
+
         # we should really have the entity_manager dispatching to tiles
-        if (
-            event in [TILE_SHUF_ATTR, GRID_COLLAPSE, PLAYER_UP, PLAYER_DOWN, PLAYER_LEFT, PLAYER_RIGHT]
-            or event.type in [pygame.KEYDOWN]
-        ):
-            if hasattr(self, "grid"):
-                self.grid.dispatch(event)
+        if not hasattr(self, "grid"):
+            return
+
+        if event.type == pygame.KEYDOWN:
+            self.grid.dispatch(event)
+            return
+
+        if not hasattr(event, "message"):
+            return
+
+        if event.message.startswith(("TILE", "GRID", "PLAYER")):
+            self.grid.dispatch(event)
 
 
     def run(self):

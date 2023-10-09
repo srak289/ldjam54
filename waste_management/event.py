@@ -1,49 +1,35 @@
-import pygame.event
+from pygame import USEREVENT
+from pygame.event import Event
 
 
-class GameEvent:
-    def __init__(self):
-        self.n = pygame.USEREVENT
+i = USEREVENT
 
-    def __iter__(self):
-        return self
+for n in (
+    "GAME_STOP",
+    "GAME_RUN",
 
-    def __next__(self):
-        cur, self.n = self.n, self.n + 1
-        return cur
-
-    def new(self, **kwargs):
-        return pygame.event.Event(
-            next(self),
-            **kwargs,
-        )
-
-ge = GameEvent()
+    "MENU_STOP",
+    "MENU_RUN",
 
 
-GAME_STOP = ge.new(message="GAME_STOP")
-GAME_RUN = ge.new(message="GAME_RUN")
+    "TILE_SHUF_ATTR",
 
 
-MENU_STOP = ge.new(message="MENU_STOP")
-MENU_RUN = ge.new(message="MENU_RUN")
+    "GRID_COLLAPSE",
 
 
-TILE_SHUF_ATTR = ge.new(message="TILE_SHUF_ATTR")
+    "PLAYER_UP",
+    "PLAYER_DOWN",
+    "PLAYER_LEFT",
+    "PLAYER_RIGHT",
+    "PLAYER_INVENTORY",
 
-
-GRID_COLLAPSE = ge.new(message="GRID_COLLAPSE")
-
-
-PLAYER_UP = ge.new(message="PLAYER_UP")
-PLAYER_DOWN = ge.new(message="PLAYER_DOWN")
-PLAYER_LEFT = ge.new(message="PLAYER_LEFT")
-PLAYER_RIGHT = ge.new(message="PLAYER_RIGHT")
-PLAYER_INVENTORY = ge.new(message="PLAYER_INVENTORY")
-
-PLAYER_CRUSHED = ge.new(message="PLAYER_CRUSHED")
-PLAYER_KILLED = ge.new(message="PLAYER_KILLED")
-PLAYER_INJURED = ge.new(message="PLAYER_INJURED")
-PLAYER_INFECTED = ge.new(message="PLAYER_INFECTED")
-PLAYER_SLIP = ge.new(message="PLAYER_SLIP")
-PLAYER_PICKUP = ge.new(message="PLAYER_PICKUP")
+    "PLAYER_CRUSHED",
+    "PLAYER_KILLED",
+    "PLAYER_INJURED",
+    "PLAYER_INFECTED",
+    "PLAYER_SLIP",
+    "PLAYER_PICKUP",
+):
+    i += 1
+    locals()[n] = Event(i, message=n)
