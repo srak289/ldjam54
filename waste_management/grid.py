@@ -81,10 +81,29 @@ class Grid(Entity):
                 x.set_position(35*j, 35*i)
 
 
+    def _affect_player(self, event):
+        if event.message == "PLAYER_EFFECT_CRUSHED":
+            pygame.event.post(GAME_LOSE)
+            self.player = None
+        if event.message == "PLAYER_EFFECT_KILLED":
+            pass
+        if event.message == "PLAYER_EFFECT_INJURED":
+            pass
+        if event.message == "PLAYER_EFFECT_INFECTED":
+            pass
+        if event.message == "PLAYER_EFFECT_SLIP":
+            pass
+        if event.message == "PLAYER_EFFECT_PICKUP":
+            pass
+
+
     def _move_player(self, event):
         # perhaps the player's location is based on tile
         # so the player should maintain a reference to the current tile
         # this would also allow interaction with buffs
+        if not self.player:
+            return
+
         cur = self.player.tile
 
         def find_player():
@@ -95,13 +114,13 @@ class Grid(Entity):
 
         i, j = find_player()
 
-        if event == PLAYER_UP:
+        if event == PLAYER_CONTROL_UP:
             i -= 1
-        elif event == PLAYER_DOWN:
+        elif event == PLAYER_CONTROL_DOWN:
             i += 1
-        elif event == PLAYER_LEFT:
+        elif event == PLAYER_CONTROL_LEFT:
             j -= 1
-        elif event == PLAYER_RIGHT:
+        elif event == PLAYER_CONTROL_RIGHT:
             j += 1
 
         if i < 0 or j < 0:
@@ -122,8 +141,9 @@ class Grid(Entity):
                 if GlassTile in x.buf:
                     r.append(x)
             for z in r:
-                if self.player.tile == z:
-                    pygame.event.post(PLAYER_CRUSHED)
+                if self.player:
+                    if self.player.tile == z:
+                        pygame.event.post(PLAYER_EFFECT_CRUSHED)
                 y.remove(z)
 
         self.grid_width -= 1
@@ -133,20 +153,20 @@ class Grid(Entity):
 
     def dispatch(self, event):
         if event.type == pygame.KEYDOWN:
-            self.player.dispatch(event)
+            if self.player:
+                self.player.dispatch(event)
         elif event == GRID_COLLAPSE:
             self._collapse()
-        # FIXME these groupings of events should have a parent that implements
-        # __iter__
-        elif event in (PLAYER_UP, PLAYER_DOWN, PLAYER_LEFT, PLAYER_RIGHT):
+            return
+
+        if not hasattr(event, "message"):
+            return
+
+        if event.message.startswith("PLAYER_CONTROL"):
             self._move_player(event)
-        elif event in (
-            PLAYER_KILLED, PLAYER_CRUSHED, PLAYER_INFECTED, PLAYER_SLIP,
-            PLAYER_INJURED, PLAYER_PICKUP
-        ):
-            pass
+        elif event.message.startswith("PLAYER_EFFECT"):
+            self._affect_player(event)
         else:
-            # TODO
             # tiles should be part of entitymanager?
             for y in self.tiles:
                 for x in y:
@@ -157,4 +177,5 @@ class Grid(Entity):
         for y in self.tiles:
             for x in y:
                 x.draw(display)
-        self.player.draw(display)
+        if self.player:
+            self.player.draw(display)

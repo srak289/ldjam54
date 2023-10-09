@@ -3,6 +3,7 @@ import pygame
 
 from .entity import *
 from .event import *
+from .font import foxbot
 from .grid import Grid
 
 
@@ -41,6 +42,13 @@ class Application:
             #self.entity_manager.draw(display)
             # there should be an order to blit or we could draw over something else
 
+    def draw_text_centered(self, display, text, color=(255, 0, 0), rect=None):
+        textwidth, textheight = foxbot.size(text)
+        text = foxbot.render(text, False, color)
+        x, y = display.get_rect().center
+
+        display.blit(text, (x - textwidth / 2, y - textheight / 2))
+
 
     def setup(self):
         """This method must set self._state to AppState.RUN"""
@@ -73,10 +81,21 @@ class Game(Application):
         self.ticks = 0
         self.actions = 0
 
+        self.gameover = False
+
 
     def draw(self, display):
         display.fill((0, 0, 0))
         self.grid.draw(display)
+        if self.gameover:
+            self.draw_text_centered(display, "GAME OVER")
+
+
+    def _handle_event(self, event):
+        if event.message == "GAME_WIN":
+            self.gamewin = True
+        elif event.message == "GAME_LOSE":
+            self.gameover = True
 
 
     def dispatch(self, event):
@@ -101,6 +120,8 @@ class Game(Application):
         if not hasattr(event, "message"):
             return
 
+        if event.message.startswith("GAME"):
+            self._handle_event(event)
         if event.message.startswith(("TILE", "GRID", "PLAYER")):
             self.grid.dispatch(event)
 
@@ -120,7 +141,9 @@ class Menu(Application):
 
 
     def draw(self, display):
-        display.fill((0, 127, 127))
+        display.fill((100, 100, 100))
+        self.draw_text_centered(display, "PRESS 'J' TO PLAY", (25, 200, 25))
+
 
 
     def dispatch(self, event):

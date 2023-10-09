@@ -43,14 +43,14 @@ class Player(Entity):
     def dispatch(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key in (pygame.K_w, pygame.K_UP):
-                pygame.event.post(PLAYER_UP)
+                pygame.event.post(PLAYER_CONTROL_UP)
             elif event.key in (pygame.K_s, pygame.K_DOWN):
-                pygame.event.post(PLAYER_DOWN)
+                pygame.event.post(PLAYER_CONTROL_DOWN)
             elif event.key in (pygame.K_a, pygame.K_LEFT):
-                pygame.event.post(PLAYER_LEFT)
+                pygame.event.post(PLAYER_CONTROL_LEFT)
             elif event.key in (pygame.K_d, pygame.K_RIGHT):
-                pygame.event.post(PLAYER_RIGHT)
+                pygame.event.post(PLAYER_CONTROL_RIGHT)
             elif event.key == pygame.K_i:
-                pygame.event.post(PLAYER_INVENTORY)
+                pygame.event.post(PLAYER_CONTROL_INVENTORY)
 
 __all__ = ["Player"]
