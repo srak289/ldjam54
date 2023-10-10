@@ -1,13 +1,7 @@
-import importlib.resources
-
 import pygame.font
 pygame.font.init()
 
-RESOURCE_BASE = importlib.resources.files("waste_management.resources")
-
-
-__all__ = []
-
+from .paths import RESOURCES
 
 class FoxBot(pygame.font.Font):
 
@@ -39,8 +33,6 @@ class FoxBot(pygame.font.Font):
 
 
 foxbot = FoxBot(
-    str(RESOURCE_BASE / "Foxbot.ttf"),
+    str(RESOURCES / "Foxbot.ttf"),
     60,
 )
-
-__all__ += ["foxbot"]

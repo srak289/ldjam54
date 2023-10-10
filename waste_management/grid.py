@@ -85,15 +85,25 @@ class Grid(Entity):
         if event.message == "PLAYER_EFFECT_CRUSHED":
             pygame.event.post(GAME_LOSE)
             self.player = None
-        if event.message == "PLAYER_EFFECT_KILLED":
+            return
+
+        if event.message == "PLAYER_EFFECT_DEATH":
+            pygame.event.post(GAME_LOSE)
+            self.player = None
+            return
+
+        # TODO
+        self.player.dispatch(event)
+
+        if event.message == "PLAYER_EFFECT_PLAGUE":
             pass
-        if event.message == "PLAYER_EFFECT_INJURED":
+        if event.message == "PLAYER_EFFECT_SLICK":
             pass
-        if event.message == "PLAYER_EFFECT_INFECTED":
+        if event.message == "PLAYER_EFFECT_FOOD":
             pass
-        if event.message == "PLAYER_EFFECT_SLIP":
+        if event.message == "PLAYER_EFFECT_KEY":
             pass
-        if event.message == "PLAYER_EFFECT_PICKUP":
+        if event.message == "PLAYER_EFFECT_EXIT":
             pass
 
 
@@ -179,3 +189,7 @@ class Grid(Entity):
                 x.draw(display)
         if self.player:
             self.player.draw(display)
+
+
+    def run(self):
+        self.player.run()

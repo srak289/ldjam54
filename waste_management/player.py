@@ -4,6 +4,7 @@ import random
 
 from .entity import Entity
 from .event import *
+from .sprite import *
 from .tile import Tile
 from .tilemeta import *
 
@@ -12,32 +13,16 @@ from .tilemeta import *
 class Player(Entity):
 
     tile: Tile = None
+    previous_tile: Tile = None
     hitpoints: int = 3
     keys: int = 0
     inventory: list = dataclasses.field(default_factory=lambda: list())
-
-
-    def draw(self, display):
-        self.surface.fill(self._transparent)
-        # something about the border math is probably wrong
-        pygame.draw.circle(
-            self.surface,
-            self.color,
-            ((self._x+self.w)/2, (self._y+self.h)/2),
-            self.w/2-5
-        )
-        display.blit(self.surface, self.rect)
 
 
     def setup(self):
         self.margin = 10
         self.buffer = 5
         self.color = (10, 240, 205)
-
-
-    def set_tile(self, t: Tile):
-        self.tile = t
-        self.rect = self.tile.rect
 
 
     def dispatch(self, event):
@@ -52,5 +37,37 @@ class Player(Entity):
                 pygame.event.post(PLAYER_CONTROL_RIGHT)
             elif event.key == pygame.K_i:
                 pygame.event.post(PLAYER_CONTROL_INVENTORY)
+        elif event == PLAYER_EFFECT_KEY:
+            self.keys += 1
+
+
+    def draw(self, display):
+        self.surface.fill(self._transparent)
+        # something about the border math is probably wrong
+        pygame.draw.circle(
+            self.surface,
+            self.color,
+            ((self._x+self.w)/2, (self._y+self.h)/2),
+            self.w/2-5
+        )
+        for h in range(self.hitpoints):
+            display.blit(HeartSprite, (10+24*h, 400))
+        for k in range(self.keys):
+            display.blit(KeySprite, (10+24*k, 450))
+        display.blit(self.surface, self.rect)
+
+
+    def run(self):
+        # this is broken for tiles recalculating ATTRS
+        if self.previous_tile != self.tile:
+            for b in self.tile.buf:
+                if b.effect:
+                    pygame.event.post(b.effect)
+            self.previous_tile = self.tile
+
+
+    def set_tile(self, t: Tile):
+        self.tile = t
+        self.rect = self.tile.rect
 
 __all__ = ["Player"]

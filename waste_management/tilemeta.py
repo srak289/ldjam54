@@ -1,5 +1,8 @@
 import configparser
-import importlib.resources
+import sys
+
+from .event import *
+from .paths import RESOURCES
 
 
 __all__ = []
@@ -22,10 +25,7 @@ class TileAttribute(metaclass=TileAttributeMeta): pass
 __all__ += ["TileAttribute"]
 
 c = configparser.ConfigParser()
-
-c.read_string(
-    importlib.resources.read_text("waste_management.resources", "tiles.ini")
-)
+c.read_string((RESOURCES / "tiles.ini").open().read())
 
 for s in c.sections():
     kwargs = {}
@@ -42,6 +42,15 @@ for s in c.sections():
     if kwargs["special"]:
         # because the grid will assign these tiles
         kwargs["frequency"] = 0
+
+    events_module = sys.modules["waste_management.event"]
+    for e in dir(events_module):
+        if e.endswith(s.upper()):
+            print(f"Set {e} as effect for {s}")
+            kwargs["effect"] = getattr(events_module, e)
+
+    if not "effect" in kwargs:
+        kwargs["effect"] = None
 
     name = f"{s.title()}Tile"
     newtile = type(name, (TileAttribute,), kwargs)

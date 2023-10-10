@@ -21,6 +21,7 @@ class AppState(enum.Enum):
 
 
 class Application:
+
     def __init__(self):
         self.entity_manager = EntityManager()
         self._state = AppState.INIT
@@ -69,6 +70,7 @@ class Application:
 
 
 class Game(Application):
+
     def setup(self):
         self.grid = Grid(0, 0, 120, 120, 1, 20, 10)
         self._state = AppState.RUN
@@ -76,13 +78,6 @@ class Game(Application):
         self.actions = 0
 
         self.gameover = False
-
-
-    def draw(self, display):
-        display.fill((0, 0, 0))
-        self.grid.draw(display)
-        if self.gameover:
-            self.font.draw_text(display, "GAME OVER")
 
 
     def _handle_event(self, event):
@@ -120,6 +115,13 @@ class Game(Application):
             self.grid.dispatch(event)
 
 
+    def draw(self, display):
+        display.fill((0, 0, 0))
+        self.grid.draw(display)
+        if self.gameover:
+            self.font.draw_text(display, "GAME OVER")
+
+
     def run(self):
         # main loop
         self.ticks += 1
@@ -128,15 +130,13 @@ class Game(Application):
         if self.ticks % (60 * 5) == 0:
             pygame.event.post(GRID_COLLAPSE)
 
+        self.grid.run()
+
 
 class Menu(Application):
+
     def setup(self):
         self._state = AppState.RUN
-
-
-    def draw(self, display):
-        display.fill((100, 100, 100))
-        self.font.draw_text(display, "PRESS 'J' TO PLAY", (25, 200, 25))
 
 
     def dispatch(self, event):
@@ -148,11 +148,18 @@ class Menu(Application):
                 self.shutdown()
                 pygame.event.post(GAME_RUN)
 
+
+    def draw(self, display):
+        display.fill((100, 100, 100))
+        self.font.draw_text(display, "PRESS 'J' TO PLAY", (25, 200, 25))
+
+
     def run(self):
         pass
 
 
 class Load(Application):
+
     def setup(self):
         self._state = AppState.RUN
         # whatever loading here
