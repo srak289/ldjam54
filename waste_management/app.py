@@ -24,6 +24,7 @@ class Application:
     def __init__(self):
         self.entity_manager = EntityManager()
         self._state = AppState.INIT
+        self.font = foxbot
 
     @property
     def state(self):
@@ -41,13 +42,6 @@ class Application:
             self.draw(display)
             #self.entity_manager.draw(display)
             # there should be an order to blit or we could draw over something else
-
-    def draw_text_centered(self, display, text, color=(255, 0, 0), rect=None):
-        textwidth, textheight = foxbot.size(text)
-        text = foxbot.render(text, False, color)
-        x, y = display.get_rect().center
-
-        display.blit(text, (x - textwidth / 2, y - textheight / 2))
 
 
     def setup(self):
@@ -88,7 +82,7 @@ class Game(Application):
         display.fill((0, 0, 0))
         self.grid.draw(display)
         if self.gameover:
-            self.draw_text_centered(display, "GAME OVER")
+            self.font.draw_text(display, "GAME OVER")
 
 
     def _handle_event(self, event):
@@ -142,8 +136,7 @@ class Menu(Application):
 
     def draw(self, display):
         display.fill((100, 100, 100))
-        self.draw_text_centered(display, "PRESS 'J' TO PLAY", (25, 200, 25))
-
+        self.font.draw_text(display, "PRESS 'J' TO PLAY", (25, 200, 25))
 
 
     def dispatch(self, event):
