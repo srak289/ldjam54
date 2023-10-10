@@ -51,9 +51,9 @@ class Player(Entity):
             self.w/2-5
         )
         for h in range(self.hitpoints):
-            display.blit(HeartSprite, (10+24*h, 400))
+            display.blit(HeartSprite.surface, (10+(32+5)*h, 400))
         for k in range(self.keys):
-            display.blit(KeySprite, (10+24*k, 450))
+            display.blit(KeySprite.surface, (10+(32+5)*k, 450))
         display.blit(self.surface, self.rect)
 
 

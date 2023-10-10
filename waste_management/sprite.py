@@ -2,6 +2,7 @@ import configparser
 import sys
 
 import pygame.image
+import pygame.transform
 from pygame import Rect, Surface
 
 from .event import *
@@ -13,7 +14,7 @@ SHEET = pygame.image.load((RESOURCES / "sprites.png").open())
 __all__ = []
 
 
-class Sprite(Surface):
+class Sprite:
 
     def __init__(self, **kwargs):
         print(f"Init {self} with {kwargs}")
@@ -23,10 +24,15 @@ class Sprite(Surface):
         # store the spritesheet location for blitting
         self.rect = Rect(x, y, w, h)
 
-        super().__init__(**kwargs)
+        self.surface = Surface(kwargs["size"])
 
         self._transparent = (255, 0, 255)
-        self.set_colorkey(self._transparent)
+        self.surface.set_colorkey(self._transparent)
+
+
+    def transform(self, size):
+        self.surface = pygame.transform.scale(self.surface, size)
+        self.surface.set_colorkey(self._transparent)
 
 
 c = configparser.ConfigParser()
@@ -41,6 +47,7 @@ for s in c.sections():
 
     name = f"{s.title()}Sprite"
     newsprite = type(name, (Sprite,), {})(**kwargs)
-    newsprite.blit(SHEET, (0, 0), area=newsprite.rect)
+    newsprite.surface.blit(SHEET, (0, 0), area=newsprite.rect)
+    newsprite.transform((32,32))
     locals()[name] = newsprite
     __all__ += [name]
