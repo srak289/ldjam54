@@ -192,4 +192,5 @@ class Grid(Entity):
 
 
     def run(self):
-        self.player.run()
+        if self.player:
+            self.player.run()

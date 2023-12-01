@@ -13,6 +13,14 @@ class GameMode(enum.Enum):
     ACTION_BASED = 2
 
 
+class GameState(enum.Enum):
+    WIN = 0
+    LOSE = 1
+    PLAY = 2
+    PAUSE = 3
+    INVENTORY = 4
+
+
 class AppState(enum.Enum):
     RUN = 0
     PAUSE = 1
@@ -147,6 +155,9 @@ class Menu(Application):
             if event.key == pygame.K_j:
                 self.shutdown()
                 pygame.event.post(GAME_RUN)
+            elif event.key == pygame.K_q:
+                self.shutdown()
+                pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 
     def draw(self, display):
